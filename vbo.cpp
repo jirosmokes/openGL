@@ -2,7 +2,7 @@
 #include <GL/glut.h>
 #include <cstdlib>
 #include <ctime>
-#include <cmath>  // for math functions like sin
+#include <cmath>  // for math functions > sin
 
 float boatPositionX = 0.0f;
 float waterOffset1 = 0.0f;
@@ -103,7 +103,7 @@ void displayWaterStipple() {
                 waterLines[j][i * 2 + 1] = -0.6f - j * 0.1f;
             }
         }
-        glBufferData(GL_ARRAY_BUFFER, sizeof(waterLines), waterLines, GL_DYNAMIC_DRAW);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(waterLines), waterLines);
         glDrawArrays(GL_LINE_STRIP, 0, 5);
     }
 
@@ -113,9 +113,13 @@ void displayWaterStipple() {
 void displayBoatBody() {
     updateBoatVertices(); // update boat vertices
     glColor3ub(171, 126, 68); // brown color for boat
+
     glBindVertexArray(boatVAO); 
     glBindBuffer(GL_ARRAY_BUFFER, boatVBO); 
-    glBufferData(GL_ARRAY_BUFFER, sizeof(boatVertices), boatVertices, GL_DYNAMIC_DRAW);
+    
+    // ppdate vbo using glBufferSubData
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(boatVertices), boatVertices);
+    
     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, boatIndices); 
 }
 
@@ -124,7 +128,10 @@ void displayBoatFlag() {
     glColor3ub(sailColor[0], sailColor[1], sailColor[2]);
     glBindVertexArray(sailVAO);
     glBindBuffer(GL_ARRAY_BUFFER, flagVBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(flagVertices), flagVertices, GL_DYNAMIC_DRAW);
+    
+    // ppdate vbo using glBufferSubData
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(flagVertices), flagVertices);
+    
     glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, sailIndices); 
 }
 
